@@ -18,12 +18,13 @@ async function query(query) {
 function parseRowsFields (rows, fields) {
     const fieldsEntries = Object.entries(fields);
 
-    return rows.reduce((acc, row) => {
+    return rows.map((acc, row) => {
+        const acc = {};
         fieldsEntries.forEach(([key, value]) => {
             acc[key] = row[value];
         });
         return acc;
-    }, {});
+    });
 }
 
 module.exports = {
