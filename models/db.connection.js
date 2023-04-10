@@ -18,7 +18,7 @@ async function query(query) {
 function parseRowsFields (rows, fields) {
     const fieldsEntries = Object.entries(fields);
 
-    return rows.map((acc, row) => {
+    return rows.map(row => {
         const acc = {};
         fieldsEntries.forEach(([key, value]) => {
             acc[key] = row[value];
