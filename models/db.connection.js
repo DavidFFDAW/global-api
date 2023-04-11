@@ -7,27 +7,38 @@ const pool = mysql.createPool({
 	database: config.db.database,
 	password: config.db.password
 }).promise();
-  
-// make it a class
-async function query(query) {
-	const [rows, fields] = await pool.execute(query);
 
-	return rows;
-}
+class Connection {
 
-function parseRowsFields (rows, fields) {
-    const fieldsEntries = Object.entries(fields);
+    parentFields = {
+        id: { name: 'id', required: false },
+        created_at: { name: 'created_at', required: false },
+        updated_at: { name: 'updated_at', required: false },
+    }
 
-    return rows.map(row => {
-        const acc = {};
-        fieldsEntries.forEach(([key, value]) => {
-            acc[key] = row[value];
+    getPool() {
+        return pool;
+    }
+
+    async query(query) {
+        const [rows, fields] = await pool.execute(query);
+
+        return rows;
+    }
+
+    parseRowsFields (rows, fields) {
+        const fieldsEntries = Object.entries(fields);
+        
+        return rows.map(row => {
+            const acc = {};
+            fieldsEntries.forEach(([key, value]) => {
+                acc[key] = row[value.name];
+            });
+            return acc;
         });
-        return acc;
-    });
+    }
 }
 
 module.exports = {
-    query,
-    parseRowsFields
+    Connection
 }
