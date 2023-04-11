@@ -3,8 +3,9 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 
-const indexRouter = require('./routes/index');
+const indexRouter = require('./routes/index.routes');
 const wrestlerRoutes = require('./routes/wrestler.routes');
+const blogRoutes = require('./routes/blog.routes');
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/wrestler', wrestlerRoutes);
+app.use('/wrestlers', wrestlerRoutes);
+app.use('/blog', blogRoutes);
 
 module.exports = app;
