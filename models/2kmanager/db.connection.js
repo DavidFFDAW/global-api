@@ -72,7 +72,7 @@ class Connection {
 
     async findOneByFilter(filterParams) {
         const where = this.getParametersSerialized(filterParams);
-        const sql = this.wrapSelect("*", where, 1);
+        const sql = this.select("*", where, 1);
         const rows = await this.query(sql);
         return this.parseRowsFields(rows, this.getFields())[0] || {};
     }
