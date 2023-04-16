@@ -73,6 +73,7 @@ class Connection {
     async findOneByFilter(filterParams) {
         const where = this.getParametersSerialized(filterParams);
         const sql = this.select("*", where, 1);
+        console.log(sql);
         const rows = await this.query(sql);
         return this.parseRowsFields(rows, this.getFields())[0] || {};
     }
@@ -88,7 +89,7 @@ class Connection {
         const limitString = limit ? `LIMIT ${limit}` : "";
         const offsetString = offset ? `OFFSET ${offset}` : "";
 
-        return `SELECT ${fieldsString} FROM ${this.table} ${whereString}${limitString} ${offsetString}`;
+        return `SELECT ${fieldsString} FROM ${this.table} ${whereString} ${limitString} ${offsetString}`;
     }
 
     getUpsertSQL(data) {
