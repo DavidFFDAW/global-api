@@ -48,7 +48,7 @@ class Connection {
     }
 
     async findAll() {
-        const rows = await this.query(this.select("*", []));
+        const rows = await this.query(this.wrapSelect("*", []));
         return this.parseRowsFields(rows, this.getFields());
     }
 
@@ -65,16 +65,20 @@ class Connection {
 
     async findByFilter(filterParams) {
         const where = this.getParametersSerialized(filterParams);
-        const sql = this.select("*", where);
+        const sql = this.wrapSelect("*", where);
         const rows = await this.query(sql);
         return this.parseRowsFields(rows, this.getFields());
     }
 
     async findOneByFilter(filterParams) {
         const where = this.getParametersSerialized(filterParams);
-        const sql = this.select("*", where, 1);
+        const sql = this.wrapSelect("*", where, 1);
         const rows = await this.query(sql);
         return this.parseRowsFields(rows, this.getFields())[0] || {};
+    }
+
+    wrapSelect(fields = [], where = [], limit = 0, offset = 0) {
+        return this.select(fields, where, limit, offset);
     }
 
     select(fields = [], where = [], limit = 0, offset = 0) {
