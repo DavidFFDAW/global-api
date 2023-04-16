@@ -55,6 +55,23 @@ router.get("/active", async function (req, res, next) {
     }
 });
 
+router.get("/single/:id", async function (req, res, next) {
+    const queryParameters = req.query;
+    queryParameters.id = req.params.id;
+
+    try {
+        const singleWrestlerByID = await wrestler.findOneByFilter(
+            queryParameters
+        );
+        res.status(200).json(singleWrestlerByID);
+    } catch (err) {
+        res.status(err.statusCode || 500).json({
+            type: "Error while getting active wrestlers",
+            message: err.message,
+        });
+    }
+});
+
 router.post("/upsert", async function (req, res, next) {
     if (!validateToken(req.headers))
         return res.status(403).json({ message: "Unauthorized" });
