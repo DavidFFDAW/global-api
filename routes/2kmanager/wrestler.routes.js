@@ -73,7 +73,8 @@ router.get("/single/:id", async function (req, res, next) {
 });
 
 router.post("/upsert", async function (req, res, next) {
-    if (!validateToken(req.headers)) return res.status(403).json({ message: "Unauthorized" });
+    const isValidToken = await validateToken(req.headers);
+    if (!isValidToken) return res.status(403).json({ message: "Unauthorized" });
 
     try {
         const upserted = await wrestler.upsert(req.body);

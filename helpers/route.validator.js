@@ -1,16 +1,16 @@
 const { User } = require("../models/2kmanager/users.model");
 
 module.exports = {
-    validateToken: (headers) => {
+    validateToken: async (headers) => {
         const bearerHeader = headers["authorization"];
         if (!bearerHeader) return false;
 
         const bearer = bearerHeader ? bearerHeader.split(" ") : "";
         const bearerToken = bearer[1];
 
-        const user = (new User()).findByToken(bearerToken);
-        console.log('user in validation: ', user);
+        const user = new User();
+        const hasUserToken = await user.findByToken(bearerToken);
 
-        return Boolean(user);
+        return Boolean(hasUserToken);
     },
 };
