@@ -10,7 +10,6 @@ module.exports = {
 
         const user = new User().findByToken(bearerToken);
 
-        if (user) return true;
-        return false;
+        return Boolean(user);
     },
 };
