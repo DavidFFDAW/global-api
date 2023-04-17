@@ -115,6 +115,7 @@ class Connection {
             );
 
         const sql = this.getUpsertSQL(data);
+        console.log(sql);
         const result = await this.query(sql);
         return result;
     }
@@ -143,7 +144,7 @@ class Connection {
     }
 
     update(data) {
-        const id = data.id;
+        const { id } = data;
 
         const [fieldsString, valuesString] = this.getFieldsAndValues(data);
 
