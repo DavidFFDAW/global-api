@@ -8,7 +8,8 @@ module.exports = {
         const bearer = bearerHeader ? bearerHeader.split(" ") : "";
         const bearerToken = bearer[1];
 
-        const user = new User().findByToken(bearerToken);
+        const user = (new User()).findByToken(bearerToken);
+        console.log('user in validation: ', user);
 
         return Boolean(user);
     },
