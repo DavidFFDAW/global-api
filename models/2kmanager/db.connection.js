@@ -121,6 +121,7 @@ class Connection {
             );
 
         const sql = this.getUpsertSQL(data);
+        console.log(sql);
         const result = await this.query(sql);
         return result;
     }
@@ -149,11 +150,28 @@ class Connection {
     }
 
     update(data) {
-        const id = data.id;
+        const { id } = data;
 
-        const [fieldsString, valuesString] = this.getFieldsAndValues(data);
+        const sqlPartial = `UPDATE ${this.table} SET text_replace_for_rest WHERE id = ${id}`;
 
-        return `UPDATE ${this.table} SET (${fieldsString}) = (${valuesString}) WHERE id = ${id}`;
+        const fields = Object.entries(this.fields).filter(([_, value]) => {
+            return value.name !== "id" && value.name !== "created_at" && value.name !== "updated_at";
+        }).reduce((acc, [key, value]) => {
+            const dbFieldName = value.name;
+
+            if (data[key]) {
+                if (value.type === "STR") {
+                    acc.push(`${dbFieldName} = '${data[key]}'`);
+                    return acc;
+                }
+                acc.push(`${dbFieldName} = ${data[key]}`);
+                return acc;
+            }
+        }, []);
+        
+        const sql = sqlPartial.replace("text_replace_for_rest", fields.join(", "));
+        console.log(sql);
+        return sql;
     }
 }
 
