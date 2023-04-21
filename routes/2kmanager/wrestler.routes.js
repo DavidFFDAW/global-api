@@ -87,4 +87,21 @@ router.post("/upsert", async function (req, res, next) {
     }
 });
 
+router.delete("/delete/:id", async function (req, res, next) {
+    if (!validateToken(req.headers))
+        return res.status(403).json({ message: "Unauthorized" });
+
+    const deleteID = req.params.id;
+
+    try {
+        const deletionResponse = await wrestler.delete(deleteID);
+        return res.status(200).json(deletionResponse);
+    } catch (err) {
+        return res.status(err.statusCode || 500).json({
+            type: "Error while deleting wrestler",
+            message: err.message,
+        });
+    }
+});
+
 module.exports = router;
