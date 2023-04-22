@@ -15,3 +15,5 @@ router.get("/all", async function (req, res, next) {
         });
     }
 });
+
+module.exports = router;
