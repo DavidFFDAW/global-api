@@ -99,6 +99,12 @@ class Connection {
         return this.insert(data);
     }
 
+    async delete(id) {
+        const sql = `DELETE FROM ${this.table} WHERE id = ${id}`;
+        const result = await this.query(sql);
+        return result;
+    }
+
     async upsert(data) {
         const missingEntries = Object.entries(this.fields).filter(
             ([key, value]) => {
