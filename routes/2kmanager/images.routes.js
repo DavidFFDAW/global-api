@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const externalImagesAPI = "http://vps-f87b433e.vps.ovh.net/2k/api/v2/";
+const externalImagesAPI = "https://vps-f87b433e.vps.ovh.net/2k/api/v2/";
 const fetch = require("node-fetch");
 
 router.get("/all", async function (req, res, next) {
