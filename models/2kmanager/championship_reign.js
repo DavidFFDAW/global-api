@@ -63,7 +63,7 @@ class ChampionshipReign extends Connection {
     }
 
     async getChampionshipReigns() {
-        const sql = "SELECT cr.*, t.name AS team_name, w.name AS wrestler_name, w.image_name AS wrestler_image, w.sex AS wrestler_sex, c.tag AS championship_tag, c.name AS championship_name, c.image AS championship_image, c.gender AS championship_gender FROM championship_reigns cr INNER JOIN wrestler w ON w.id = cr.wrestler_id INNER JOIN championship c ON cr.championship_id = c.id LEFT JOIN teams t ON t.id = cr.wrestler_id ORDER BY days DESC";
+        const sql = "SELECT cr.*, t.name AS team_name, w.name AS wrestler_name, w.image_name AS wrestler_image, w.sex AS wrestler_sex, c.tag AS championship_tag, c.name AS championship_name, c.image AS championship_image, c.gender AS championship_gender FROM championship_reigns cr INNER JOIN wrestler w ON w.id = cr.wrestler_id INNER JOIN championship c ON cr.championship_id = c.id LEFT JOIN teams t ON t.id = cr.wrestler_id WHERE c.active = TRUE ORDER BY days DESC";
         const rows = await this.query(sql);
         // return this.parseRowsFields(rows, this.getFields());
         return this.parseResponse(rows);
