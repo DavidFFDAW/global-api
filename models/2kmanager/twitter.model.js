@@ -21,13 +21,13 @@ class Twitter extends Connection {
 
     getNoReplyTweets() {
         const sql =
-            "SELECT t.*, w.name AS wrestler_name, w.image_name AS wrestler_image FROM tweets t INNER JOIN wrestler w ON t.author_id = w.id WHERE reply_to IS NULL ORDER BY t.created_at DESC";
+            "SELECT t.*, w.twitter_name AS wrestler_name, w.twitter_image AS wrestler_image, w.twitter_acc AS twitter_acc FROM tweets t INNER JOIN wrestler w ON t.author_id = w.id WHERE reply_to IS NULL ORDER BY t.created_at DESC";
         return this.query(sql);
     }
 
     getRepliesTweets() {
         const sql =
-            "SELECT t.*, w.name AS wrestler_name, w.image_name AS wrestler_image FROM tweets t INNER JOIN wrestler w ON t.author_id = w.id WHERE reply_to IS NOT NULL ORDER BY t.created_at DESC";
+            "SELECT SELECT t.*, w.twitter_name AS wrestler_name, w.twitter_image AS wrestler_image, w.twitter_acc AS twitter_acc  FROM tweets t INNER JOIN wrestler w ON t.author_id = w.id WHERE reply_to IS NOT NULL ORDER BY t.created_at DESC";
         return this.query(sql);
     }
 
