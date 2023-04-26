@@ -51,9 +51,21 @@ class Twitter extends Connection {
         return this.assignRepliesToTweets(tweets, replies);
     }
 
-    getSingleTweetWithReplies(id) {
-        const sql = `SELECT t.*, w.name AS wrestler_name, w.image_name AS wrestler_image FROM tweets t INNER JOIN wrestler w ON t.author_id = w.id WHERE t.id = ${id}`;
+    getSingleTweetById(id) {
+        const sql = `SELECT t.*, w.twitter_name AS wrestler_name, w.twitter_image AS wrestler_image, w.twitter_acc AS twitter_acc FROM tweets t INNER JOIN wrestler w ON t.author_id = w.id WHERE t.id =${id}`;
         return this.query(sql);
+    }
+
+    getRepliesToTweet(id) {
+        const sql = `SELECT t.*, w.twitter_name AS wrestler_name, w.twitter_image AS wrestler_image, w.twitter_acc AS twitter_acc FROM tweets t INNER JOIN wrestler w ON t.author_id = w.id WHERE t.reply_to = ${id}`;
+        return this.query(sql);
+    }
+
+    async getSingleTweetWithReplies(id) {
+        const tweet = await this.getSingleTweetById(id);
+        const replies = await this.getRepliesToTweet(id);
+
+        return this.assignRepliesToTweets(tweet, replies);
     }
 }
 

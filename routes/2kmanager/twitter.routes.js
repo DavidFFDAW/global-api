@@ -16,7 +16,7 @@ router.get("/", async function (_, res, next) {
     }
 });
 
-router.get("/tweet/:id", async function (_, res, next) {
+router.get("/tweet/:id", async function (req, res, next) {
     const id = req.params.id;
 
     try {
