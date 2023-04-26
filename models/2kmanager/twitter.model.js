@@ -21,13 +21,13 @@ class Twitter extends Connection {
 
     getNoReplyTweets() {
         const sql =
-            "SELECT t.*, w.twitter_name AS wrestler_name, w.twitter_image AS wrestler_image, w.twitter_acc AS twitter_acc FROM tweets t INNER JOIN wrestler w ON t.author_id = w.id WHERE reply_to IS NULL ORDER BY t.created_at DESC";
+            "SELECT t.*, w.twitter_name AS wrestler_name, w.twitter_image AS wrestler_image, w.twitter_acc AS twitter_account FROM tweets t INNER JOIN wrestler w ON t.author_id = w.id WHERE reply_to IS NULL ORDER BY t.created_at DESC";
         return this.query(sql);
     }
 
     getRepliesTweets() {
         const sql =
-            "SELECT SELECT t.*, w.twitter_name AS wrestler_name, w.twitter_image AS wrestler_image, w.twitter_acc AS twitter_acc  FROM tweets t INNER JOIN wrestler w ON t.author_id = w.id WHERE reply_to IS NOT NULL ORDER BY t.created_at DESC";
+            "SELECT t.*, w.twitter_name AS wrestler_name, w.twitter_image AS wrestler_image, w.twitter_acc AS twitter_account FROM tweets t INNER JOIN wrestler w ON t.author_id = w.id WHERE reply_to IS NOT NULL ORDER BY t.created_at DESC";
         return this.query(sql);
     }
 
@@ -57,7 +57,7 @@ class Twitter extends Connection {
     }
 
     getRepliesToTweet(id) {
-        const sql = `SELECT t.*, w.twitter_name AS wrestler_name, w.twitter_image AS wrestler_image, w.twitter_acc AS twitter_acc FROM tweets t INNER JOIN wrestler w ON t.author_id = w.id WHERE t.reply_to = ${id}`;
+        const sql = `SELECT t.*, w.twitter_name AS wrestler_name, w.twitter_image AS wrestler_image, w.twitter_acc AS twitter_acc FROM tweets t INNER JOIN wrestler w ON t.author_id = w.id WHERE t.reply_to = ${id} ORDER BY t.created_at DESC`;
         return this.query(sql);
     }
 
