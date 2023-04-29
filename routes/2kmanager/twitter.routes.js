@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { Twitter } = require("../../models/2kmanager/twitter.model");
+const { validateToken } = require("../../helpers/route.validator");
 
 const tw = new Twitter();
 
@@ -25,6 +26,21 @@ router.get("/tweet/:id", async function (req, res, next) {
     } catch (err) {
         res.status(err.statusCode || 500).json({
             type: "Error while getting tweets",
+            message: err.message,
+        });
+    }
+});
+
+router.post("/tweet/upsert", async function (req, res, next) {
+    const isValidToken = await validateToken(req.headers);
+    if (!isValidToken) return res.status(403).json({ message: "Unauthorized" });
+
+    try {
+        const upserted = await tw.upsert(req.body);
+        res.status(200).json(upserted);
+    } catch (err) {
+        res.status(err.statusCode || 500).json({
+            type: "Error while upserting tweets",
             message: err.message,
         });
     }

@@ -73,7 +73,6 @@ class Connection {
     async findOneByFilter(filterParams) {
         const where = this.getParametersSerialized(filterParams);
         const sql = this.select("*", where, 1);
-        console.log(sql);
         const rows = await this.query(sql);
         return this.parseRowsFields(rows, this.getFields())[0] || {};
     }
@@ -154,23 +153,31 @@ class Connection {
 
         const sqlPartial = `UPDATE ${this.table} SET text_replace_for_rest WHERE id = ${id}`;
 
-        const fields = Object.entries(this.fields).filter(([_, value]) => {
-            return value.name !== "id" && value.name !== "created_at" && value.name !== "updated_at";
-        }).reduce((acc, [key, value]) => {
-            const dbFieldName = value.name;
+        const fields = Object.entries(this.fields)
+            .filter(([_, value]) => {
+                return (
+                    value.name !== "id" &&
+                    value.name !== "created_at" &&
+                    value.name !== "updated_at"
+                );
+            })
+            .reduce((acc, [key, value]) => {
+                const dbFieldName = value.name;
 
-            if (data[key]) {
-                if (value.type === "STR") {
-                    acc.push(`${dbFieldName} = '${data[key]}'`);
+                if (data[key]) {
+                    if (value.type === "STR") {
+                        acc.push(`${dbFieldName} = '${data[key]}'`);
+                        return acc;
+                    }
+                    acc.push(`${dbFieldName} = ${data[key]}`);
                     return acc;
                 }
-                acc.push(`${dbFieldName} = ${data[key]}`);
-                return acc;
-            }
-        }, []);
-        
-        const sql = sqlPartial.replace("text_replace_for_rest", fields.join(", "));
-        console.log(sql);
+            }, []);
+
+        const sql = sqlPartial.replace(
+            "text_replace_for_rest",
+            fields.join(", ")
+        );
         return sql;
     }
 }

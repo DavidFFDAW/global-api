@@ -9,7 +9,7 @@ class Twitter extends Connection {
         device: { name: "device", required: true, type: "STR" },
         author_id: { name: "author_id", required: true, type: "INT" },
         comments: { name: "comments", required: true, type: "INT" },
-        reply_to: { name: "reply_to", required: true, type: "INT" },
+        reply_to: { name: "reply_to", required: false, type: "INT" },
     };
 
     static tableName = "tweets";
