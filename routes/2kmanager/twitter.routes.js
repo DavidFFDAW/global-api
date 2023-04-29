@@ -46,4 +46,18 @@ router.post("/tweet/upsert", async function (req, res, next) {
     }
 });
 
+router.delete("/tweet/delete/:id", async function (req, res, next) {
+    const id = req.params.id;
+
+    try {
+        const list = await tw.delete(id);
+        res.status(200).json(list);
+    } catch (err) {
+        res.status(err.statusCode || 500).json({
+            type: "Error while deleting tweet by id: " + id,
+            message: err.message,
+        });
+    }
+});
+
 module.exports = router;
