@@ -120,7 +120,6 @@ class Connection {
             );
 
         const sql = this.getUpsertSQL(data);
-        console.log(sql);
         const result = await this.query(sql);
         return result;
     }
@@ -172,6 +171,8 @@ class Connection {
                     acc.push(`${dbFieldName} = ${data[key]}`);
                     return acc;
                 }
+
+                return acc;
             }, []);
 
         const sql = sqlPartial.replace(

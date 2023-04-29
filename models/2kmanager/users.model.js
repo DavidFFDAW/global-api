@@ -40,7 +40,6 @@ class User extends Connection {
         };
 
         const result = await this.findOneByFilter(params);
-        console.log("Result: ", result);
         return result;
     }
 
@@ -50,7 +49,6 @@ class User extends Connection {
         };
 
         const result = await this.findOneByFilter(params);
-        console.log("Result: ", result);
         return result;
     }
 }
