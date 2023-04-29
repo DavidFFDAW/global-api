@@ -65,7 +65,7 @@ class Twitter extends Connection {
         const tweet = await this.getSingleTweetById(id);
         const replies = await this.getRepliesToTweet(id);
 
-        return this.assignRepliesToTweets(tweet, replies);
+        return this.assignRepliesToTweets(tweet, replies)[0];
     }
 }
 
