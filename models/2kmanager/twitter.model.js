@@ -52,12 +52,12 @@ class Twitter extends Connection {
     }
 
     getSingleTweetById(id) {
-        const sql = `SELECT t.*, w.twitter_name AS wrestler_name, w.twitter_image AS wrestler_image, w.twitter_acc AS twitter_acc FROM tweets t INNER JOIN wrestler w ON t.author_id = w.id WHERE t.id =${id}`;
+        const sql = `SELECT t.*, w.twitter_name AS wrestler_name, w.twitter_image AS wrestler_image, w.twitter_acc AS twitter_account FROM tweets t INNER JOIN wrestler w ON t.author_id = w.id WHERE t.id =${id}`;
         return this.query(sql);
     }
 
     getRepliesToTweet(id) {
-        const sql = `SELECT t.*, w.twitter_name AS wrestler_name, w.twitter_image AS wrestler_image, w.twitter_acc AS twitter_acc FROM tweets t INNER JOIN wrestler w ON t.author_id = w.id WHERE t.reply_to = ${id} ORDER BY t.created_at DESC`;
+        const sql = `SELECT t.*, w.twitter_name AS wrestler_name, w.twitter_image AS wrestler_image, w.twitter_acc AS twitter_account FROM tweets t INNER JOIN wrestler w ON t.author_id = w.id WHERE t.reply_to = ${id} ORDER BY t.created_at DESC`;
         return this.query(sql);
     }
 
