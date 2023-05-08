@@ -32,7 +32,7 @@ class Wrestler extends Connection {
     }
 
     async findWithChampionships() { 
-        const sql = `SELECT wr.name, wr.sex AS sex, wr.brand AS brand, wr.status AS status, wr.image_name AS image, wr.overall AS overall,
+        const sql = `SELECT wr.id, wr.name, wr.sex AS sex, wr.brand AS brand, wr.status AS status, wr.image_name AS image, wr.overall AS overall,
             ( SELECT chs.name FROM wrestler w INNER JOIN championship_reigns chr ON chr.wrestler_id = w.id INNER JOIN championship chs ON chs.id = chr.championship_id WHERE w.id = wr.id AND chs.tag = FALSE AND chr.current = TRUE AND chs.active = TRUE ) AS championship ,
             ( SELECT chs.image FROM wrestler w INNER JOIN championship_reigns chr ON chr.wrestler_id = w.id INNER JOIN championship chs ON chs.id = chr.championship_id WHERE w.id = wr.id AND chs.tag = FALSE AND chr.current = TRUE AND chs.active = TRUE ) AS championship_image
             FROM wrestler wr WHERE wr.status = 'active' ORDER BY wr.name ASC`;
@@ -40,6 +40,7 @@ class Wrestler extends Connection {
         const result = await this.query(sql);
         return result.map(it => {
             const base = {
+                id: it.id,
                 name: it.name,
                 sex: it.sex,
                 brand: it.brand,
