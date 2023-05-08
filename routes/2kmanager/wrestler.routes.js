@@ -55,6 +55,19 @@ router.get("/active", async function (req, res, next) {
     }
 });
 
+router.get("/with/championships/active", async function (req, res, next) {
+
+    try {
+        const wrestlers = await wrestler.findWithChampionships();
+        res.status(200).json(wrestlers);
+    } catch (err) {
+        res.status(err.statusCode || 500).json({
+            type: "Error while getting active wrestlers with championships",
+            message: err.message,
+        });
+    }
+});
+
 router.get("/single/:id", async function (req, res, next) {
     const queryParameters = req.query;
     queryParameters.id = req.params.id;

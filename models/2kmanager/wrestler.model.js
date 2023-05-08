@@ -30,6 +30,38 @@ class Wrestler extends Connection {
     wrapSelect(fields = [], where = [], limit = 0, offset = 0) {
         return this.select(fields, where, limit, offset) + " ORDER BY name ASC";
     }
+
+    async findWithChampionships() { 
+        const sql = `SELECT wr.name, wr.sex AS sex, wr.brand AS brand, wr.status AS status, wr.image_name AS image, wr.overall AS overall,
+            ( SELECT chs.name FROM wrestler w INNER JOIN championship_reigns chr ON chr.wrestler_id = w.id INNER JOIN championship chs ON chs.id = chr.championship_id WHERE w.id = wr.id AND chs.tag = FALSE AND chr.current = TRUE AND chs.active = TRUE ) AS championship ,
+            ( SELECT chs.image FROM wrestler w INNER JOIN championship_reigns chr ON chr.wrestler_id = w.id INNER JOIN championship chs ON chs.id = chr.championship_id WHERE w.id = wr.id AND chs.tag = FALSE AND chr.current = TRUE AND chs.active = TRUE ) AS championship_image
+            FROM wrestler wr WHERE wr.status = 'active' ORDER BY wr.name ASC`;
+        
+        const result = await this.query(sql);
+        return result.map(it => {
+            const base = {
+                name: it.name,
+                sex: it.sex,
+                brand: it.brand,
+                status: it.status,
+                image: it.image,
+                overall: it.overall,
+                championship: false,
+            }
+
+            if (it.championship) {
+                return {
+                    ...base,
+                    championship: {
+                        name: it.championship,
+                        // short: it.championship_short,
+                        image: it.championship_image,
+                    }
+                }
+            }
+            return base;
+        })
+    }
 }
 
 module.exports = {
