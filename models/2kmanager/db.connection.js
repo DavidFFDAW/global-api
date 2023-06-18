@@ -56,8 +56,8 @@ class Connection {
         return Object.entries(filterParams).map(([key, value]) => {
             if (this.fields[key]) {
                 return this.fields[key].type === "STR"
-                    ? `${key} LIKE '%${mysql.escape(value)}%'`
-                    : `${key} = ${mysql.escape(value)}`;
+                    ? `${key} LIKE "%${mysql.escape(value)}%"`
+                    : `${key} = ${value}`;
             }
             return "";
         });
@@ -122,6 +122,9 @@ class Connection {
             );
 
         const sql = this.getUpsertSQL(data);
+        console.log({
+            sql,
+        });
         const result = await this.query(sql);
         return result;
     }
@@ -167,9 +170,7 @@ class Connection {
 
                 if (data[key]) {
                     if (value.type === "STR") {
-                        acc.push(
-                            `${dbFieldName} = '${mysql.escape(data[key])}'`
-                        );
+                        acc.push(`${dbFieldName} = ${mysql.escape(data[key])}`);
                         return acc;
                     }
                     acc.push(`${dbFieldName} = ${data[key]}`);
