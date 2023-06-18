@@ -30,7 +30,7 @@ class Twitter extends Connection {
     }
 
     getAdminAllTweets() {
-        const sql = `SELECT t.*, w.twitter_name AS wrestler_name, w.twitter_image AS wrestler_image, w.twitter_acc AS twitter_account FROM ${this.table} t INNER JOIN wrestler w ON t.author_id = w.id ORDER BY t.created_at DESC`;
+        const sql = `SELECT t.*, w.twitter_name AS wrestler_name, w.twitter_image AS wrestler_image, w.twitter_acc AS twitter_account, t.reply_to FROM ${this.table} t INNER JOIN wrestler w ON t.author_id = w.id ORDER BY t.created_at DESC`;
         return this.query(sql);
     }
 
