@@ -31,6 +31,11 @@ class Twitter extends Connection {
         return this.query(sql);
     }
 
+    getAdminAllTweets() {
+        const sql = `SELECT t.* FROM ${this.table} t ORDER BY t.created_at DESC`;
+        return this.query(sql);
+    }
+
     assignRepliesToTweets(tweets, replies) {
         return tweets.map((tweet) => {
             const repliesToTweet = replies.filter(
