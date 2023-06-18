@@ -85,9 +85,7 @@ class Connection {
         const fieldsString = fields.length > 1 ? fields.join(", ") : "*";
         const whereString =
             where.length > 0
-                ? `WHERE ${where
-                      .map((item) => mysql.escape(item))
-                      .join(" AND ")}`
+                ? `WHERE ${where.map((item) => item).join(" AND ")}`
                 : "";
         const limitString = limit ? `LIMIT ${limit}` : "";
         const offsetString = offset ? `OFFSET ${offset}` : "";
