@@ -22,7 +22,7 @@ class Connection {
     }
 
     async query(query) {
-        const [rows, fields] = await pool.execute(query);
+        const [rows, _] = await pool.execute(query);
 
         return rows;
     }
@@ -56,8 +56,8 @@ class Connection {
         return Object.entries(filterParams).map(([key, value]) => {
             if (this.fields[key]) {
                 return this.fields[key].type === "STR"
-                    ? `${key} LIKE '%${value}%'`
-                    : `${key} = ${value}`;
+                    ? `${key} LIKE '%${mysql.escape(value)}%'`
+                    : `${key} = ${mysql.escape(value)}`;
             }
             return "";
         });
@@ -84,7 +84,11 @@ class Connection {
     select(fields = [], where = [], limit = 0, offset = 0) {
         const fieldsString = fields.length > 1 ? fields.join(", ") : "*";
         const whereString =
-            where.length > 0 ? `WHERE ${where.join(" AND ")}` : "";
+            where.length > 0
+                ? `WHERE ${where
+                      .map((item) => mysql.escape(item))
+                      .join(" AND ")}`
+                : "";
         const limitString = limit ? `LIMIT ${limit}` : "";
         const offsetString = offset ? `OFFSET ${offset}` : "";
 
@@ -112,7 +116,7 @@ class Connection {
         );
 
         const missingEntriesString = missingEntries
-            .map(([key, value]) => key)
+            .map(([key, _]) => key)
             .join(", ");
         if (missingEntries.length > 0)
             throw new Error(
@@ -132,7 +136,7 @@ class Connection {
         const valuesString = fields
             .map(([key, value]) => {
                 if (value.type === "STR") {
-                    return `'${datas[key]}'`;
+                    return mysql.escape(datas[key]);
                 }
                 return datas[key];
             })
@@ -165,7 +169,9 @@ class Connection {
 
                 if (data[key]) {
                     if (value.type === "STR") {
-                        acc.push(`${dbFieldName} = '${data[key]}'`);
+                        acc.push(
+                            `${dbFieldName} = '${mysql.escape(data[key])}'`
+                        );
                         return acc;
                     }
                     acc.push(`${dbFieldName} = ${data[key]}`);
