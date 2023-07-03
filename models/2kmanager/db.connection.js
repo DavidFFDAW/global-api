@@ -56,7 +56,7 @@ class Connection {
         return Object.entries(filterParams).map(([key, value]) => {
             if (this.fields[key]) {
                 return this.fields[key].type === "STR"
-                    ? `${key} LIKE "%${mysql.escape(value)}%"`
+                    ? `${key} LIKE "%${value}%"`
                     : `${key} = ${value}`;
             }
             return "";
@@ -122,9 +122,6 @@ class Connection {
             );
 
         const sql = this.getUpsertSQL(data);
-        console.log({
-            sql,
-        });
         const result = await this.query(sql);
         return result;
     }

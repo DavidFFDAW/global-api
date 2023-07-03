@@ -48,6 +48,7 @@ class User extends Connection {
             email,
         };
 
+
         const result = await this.findOneByFilter(params);
         return result;
     }
