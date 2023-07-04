@@ -99,13 +99,13 @@ router.post("/upsert", async function (req, res, next) {
     }
 });
 
-router.delete("/status/change/", async function (req, res, next) {
+router.put("/status/change/", async function (req, res, next) {
     if (!validateToken(req.headers))
         return res.status(403).json({ message: "Unauthorized" });
 
     try {
-        const deletionResponse = await wrestler.changeStatus(req.body);
-        return res.status(200).json(deletionResponse);
+        const statusChangeResponse = await wrestler.changeStatus(req.body);
+        return res.status(200).json(statusChangeResponse);
     } catch (err) {
         return res.status(err.statusCode || 500).json({
             type: "Error while deleting wrestler",
