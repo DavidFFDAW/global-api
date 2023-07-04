@@ -31,14 +31,14 @@ class Wrestler extends Connection {
         return this.select(fields, where, limit, offset) + " ORDER BY name ASC";
     }
 
-    async findWithChampionships() { 
+    async findWithChampionships() {
         const sql = `SELECT wr.id, wr.name, wr.sex AS sex, wr.brand AS brand, wr.status AS status, wr.image_name AS image, wr.overall AS overall,
             ( SELECT chs.name FROM wrestler w INNER JOIN championship_reigns chr ON chr.wrestler_id = w.id INNER JOIN championship chs ON chs.id = chr.championship_id WHERE w.id = wr.id AND chs.tag = FALSE AND chr.current = TRUE AND chs.active = TRUE ) AS championship ,
             ( SELECT chs.image FROM wrestler w INNER JOIN championship_reigns chr ON chr.wrestler_id = w.id INNER JOIN championship chs ON chs.id = chr.championship_id WHERE w.id = wr.id AND chs.tag = FALSE AND chr.current = TRUE AND chs.active = TRUE ) AS championship_image
             FROM wrestler wr WHERE wr.status = 'active' ORDER BY wr.name ASC`;
-        
+
         const result = await this.query(sql);
-        return result.map(it => {
+        return result.map((it) => {
             const base = {
                 id: it.id,
                 name: it.name,
@@ -48,7 +48,7 @@ class Wrestler extends Connection {
                 image: it.image,
                 overall: it.overall,
                 championship: false,
-            }
+            };
 
             if (it.championship) {
                 return {
@@ -57,11 +57,18 @@ class Wrestler extends Connection {
                         name: it.championship,
                         // short: it.championship_short,
                         image: it.championship_image,
-                    }
-                }
+                    },
+                };
             }
             return base;
-        })
+        });
+    }
+
+    async changeStatus(requestBody) {
+        const { id, status } = requestBody;
+        const sql = `UPDATE ${Wrestler.tableName} SET status = '${status}' WHERE id = ${id}`;
+
+        return await this.query(sql);
     }
 }
 
