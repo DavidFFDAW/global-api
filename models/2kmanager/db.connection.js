@@ -106,6 +106,13 @@ class Connection {
         return result;
     }
 
+    async bulkDelete(idArray) {
+        const sql = `DELETE FROM ${this.table} WHERE id IN (${idArray.join(
+            ","
+        )})`;
+        return await this.query(sql);
+    }
+
     async upsert(data) {
         const missingEntries = Object.entries(this.fields).filter(
             ([key, value]) => {
