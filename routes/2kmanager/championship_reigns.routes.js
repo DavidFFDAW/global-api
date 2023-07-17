@@ -60,4 +60,26 @@ router.get("/create/datas", async function (req, res, next) {
     }
 });
 
+router.post("create/new/reign", async function(req, res, next) {
+    // check body
+    const body = req.body;
+
+    try {
+
+        
+        // validate datas received
+        
+        
+        // decurrentize current champion and recalculate reign days
+        
+        
+        // create new reign based on datas
+    } catch (exception) {
+        res.status(exception.statusCode || 500).json({
+            type: "",
+            message: err.message,
+        });
+    }
+});
+
 module.exports = router;
