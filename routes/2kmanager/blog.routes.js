@@ -22,7 +22,7 @@ router.get('/single/:id', async function (req, res, next) {
     const id = req.params.id;
 
     try {
-        const singlePost = await blog.find(id);
+        const singlePost = await blog.findOneByFilter({ id });
         res.status(200).json(singlePost);
     } catch (err) {
         console.error(err.message);
