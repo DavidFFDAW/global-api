@@ -18,7 +18,7 @@ router.get('/all', async function (req, res, next) {
     }
 });
 
-router.get('/single/:id', async function (req, res, next) {
+router.get('/single/post/:id', async function (req, res, next) {
     const id = req.params.id;
 
     try {
